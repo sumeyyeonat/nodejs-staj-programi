@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #333; }
+        ul { list-style-type: none; padding: 0; }
+        li { background: #f4f4f4; margin: 5px 0; padding: 10px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h1>User List</h1>
+    <ul>
+        <% users.forEach(function(user) { %>
+            <li><strong>Name:</strong> <%= user.name %> | <strong>Email:</strong> <%= user.email %></li>
+        <% }); %>
+    </ul>
+</body>
+</html>
