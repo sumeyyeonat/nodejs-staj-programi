@@ -1,0 +1,1 @@
+Bu metin async/await ile yazıldı.

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task 9 - Form Verisi Alma</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        padding: 2rem;
+      }
+      form {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px #0001;
+        max-width: 400px;
+        margin: auto;
+      }
+      input,
+      button {
+        padding: 0.5rem;
+        margin: 0.5rem 0;
+        width: 100%;
+      }
+      button {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <form action="/gonder" method="POST">
+      <h2>Ad/Soyad Formu</h2>
+      <input type="text" name="ad" placeholder="Adınız" required />
+      <input type="text" name="soyad" placeholder="Soyadınız" required />
+      <button type="submit">Gönder</button>
+    </form>
+  </body>
+</html>
