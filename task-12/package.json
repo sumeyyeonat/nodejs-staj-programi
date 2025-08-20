@@ -1,0 +1,12 @@
+{
+  "name": "task-12",
+  "version": "1.0.0",
+  "description": "CRUD API on local JSON file",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
