@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notlar</title>
+  </head>
+  <body>
+    <h1>Notlar</h1>
+    <ul>
+      <% if (notes.length === 0) { %>
+      <li>Henüz not eklenmedi.</li>
+      <% } else { %> <% notes.forEach(function(note) { %>
+      <li><%= note %></li>
+      <% }); %> <% } %>
+    </ul>
+
+    <h2>Yeni Not Ekle</h2>
+    <form action="/notes" method="POST">
+      <input type="text" name="note" placeholder="Notunuzu girin" required />
+      <button type="submit">Ekle</button>
+    </form>
+  </body>
+</html>
