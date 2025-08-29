@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog API</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(120deg, #e0e7ff 0%, #f4f4f4 100%);
+        margin: 0;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 4px 24px #0002;
+      }
+      .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+      .logo-icon {
+        width: 48px;
+        height: 48px;
+        margin-right: 10px;
+      }
+      h1 {
+        text-align: center;
+        color: #2a2a2a;
+        font-size: 2.1em;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+      }
+      .login-form {
+        max-width: 350px;
+        margin: 24px auto 36px auto;
+        padding: 28px 24px 20px 24px;
+        background: #f6f8ff;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px #0001;
+        animation: fadeIn 0.7s;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .login-form label {
+        display: block;
+        margin-bottom: 7px;
+        color: #333;
+        font-weight: 500;
+      }
+      .login-form input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 16px;
+        border: 1px solid #bfcfff;
+        border-radius: 6px;
+        font-size: 1em;
+        background: #fafdff;
+        transition: border 0.2s;
+      }
+      .login-form input:focus {
+        border: 1.5px solid #5a7cff;
+        outline: none;
+      }
+      .login-form button {
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(90deg, #5a7cff 0%, #007bff 100%);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-size: 1.1em;
+        font-weight: 500;
+        cursor: pointer;
+        box-shadow: 0 2px 8px #5a7cff22;
+        transition: background 0.2s;
+      }
+      .login-form button:hover {
+        background: linear-gradient(90deg, #007bff 0%, #5a7cff 100%);
+      }
+      .error-message {
+        color: #c00;
+        text-align: center;
+        margin-bottom: 10px;
+        font-weight: 500;
+      }
+      .blog {
+        border-bottom: 1px solid #eee;
+        padding: 16px 0;
+      }
+      .blog:last-child {
+        border-bottom: none;
+      }
+      .blog-title {
+        font-size: 1.3em;
+        color: #222;
+        margin-bottom: 6px;
+      }
+      .blog-content {
+        color: #444;
+      }
+      .blog-date {
+        font-size: 0.9em;
+        color: #888;
+        margin-top: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <svg
+          class="logo-icon"
+          viewBox="0 0 48 48"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect width="48" height="48" rx="12" fill="#5a7cff" />
+          <path
+            d="M14 34V14h20v20H14zm2-2h16V16H16v16zm3-3h10v-2H19v2zm0-4h10v-2H19v2zm0-4h10v-2H19v2z"
+            fill="#fff"
+          />
+        </svg>
+        <h1>Blog API</h1>
+      </div>
+      <form class="login-form" id="loginForm">
+        <div class="error-message" id="loginError"></div>
+        <label for="username">Kullanıcı Adı</label>
+        <input
+          type="text"
+          id="username"
+          placeholder="Kullanıcı adınızı girin"
+          required
+          autocomplete="username"
+        />
+        <label for="password">Şifre</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Şifrenizi girin"
+          required
+          autocomplete="current-password"
+        />
+        <button type="submit">Giriş Yap</button>
+      </form>
+      <div id="blog-list"></div>
+    </div>
+    <script>
+      let token = null;
+
+      async function fetchBlogs() {
+        const res = await fetch("/api/blogs");
+        const blogs = await res.json();
+        const list = document.getElementById("blog-list");
+        list.innerHTML = blogs
+          .map(
+            (blog) => `
+    <div class="blog">
+      <div class="blog-title">${blog.title}</div>
+      <div class="blog-content">${blog.content}</div>
+      <div class="blog-date">${new Date(blog.createdAt).toLocaleString(
+        "tr-TR"
+      )}</div>
+    </div>
+  `
+          )
+          .join("");
+      }
+
+      document.getElementById("loginForm").onsubmit = async function (e) {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const errorDiv = document.getElementById("loginError");
+        errorDiv.textContent = "";
+        try {
+          const res = await fetch("/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          });
+          const data = await res.json();
+          if (res.ok && data.token) {
+            token = data.token;
+            document.getElementById("loginForm").style.display = "none";
+            fetchBlogs();
+          } else {
+            errorDiv.textContent = data.message || "Giriş başarısız.";
+          }
+        } catch (err) {
+          errorDiv.textContent = "Sunucu hatası.";
+        }
+      };
+
+      window.onload = fetchBlogs;
+    </script>
+  </body>
+</html>
