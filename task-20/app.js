@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
@@ -10,9 +11,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // MongoDB bağlantısı
-mongoose.connect(
-  "mongodb+srv://sumeyye:sumeyye1234@cluster0.d6nz3q5.mongodb.net/task20?retryWrites=true&w=majority&appName=Cluster0"
-);
+mongoose.connect(process.env.MONGODB_URI);
 
 // Bağlantı durumu kontrolü
 mongoose.connection.on("connected", () => {
@@ -41,7 +40,7 @@ const BlogSchema = new mongoose.Schema({
 });
 const Blog = mongoose.model("Blog", BlogSchema);
 
-const JWT_SECRET = "gizliAnahtar";
+const JWT_SECRET = process.env.JWT_SECRET || "gizliAnahtar";
 
 // Kayıt endpoint'i (ilk kullanıcı admin olur)
 app.post("/register", async (req, res) => {
@@ -128,7 +127,7 @@ app.delete(
   }
 );
 
-const PORT = 3020;
+const PORT = process.env.PORT || 3020;
 app.listen(PORT, () => {
   console.log(`Server ${PORT} portunda çalışıyor`);
 });

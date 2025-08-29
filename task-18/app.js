@@ -1,3 +1,4 @@
+require("dotenv").config();
 // Basit kullanıcı kayıt ve giriş sistemi (Express, MongoDB, bcrypt)
 const express = require("express");
 const mongoose = require("mongoose");
@@ -16,15 +17,13 @@ app.get("/users", async (req, res) => {
 
 // MongoDB bağlantısı
 mongoose
-  .connect(
-    "mongodb+srv://sumeyye:sumeyye1234@cluster0.d6nz3q5.mongodb.net/task18?retryWrites=true&w=majority&appName=Cluster0",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("MongoDB bağlantısı başarılı"))
   .catch((err) => console.error("MongoDB bağlantı hatası:", err));
+const JWT_SECRET = process.env.JWT_SECRET || "gizliAnahtar";
 
 // Kayıt endpointi
 app.post("/register", async (req, res) => {
@@ -52,5 +51,5 @@ app.post("/login", async (req, res) => {
   res.json({ message: "Giriş başarılı." });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server ${PORT} portunda çalışıyor`));
